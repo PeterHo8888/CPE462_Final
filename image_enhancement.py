@@ -211,17 +211,6 @@ class ImageEnhancement:
         self.b = self.img[...,2]
         self.swap_img()
 
-    def median_blur(self):
-        create_sliders(lambda size: self.median_blur_median_blur(size), "Median Blur", ("Kernel size:", 1, 100, 50))        
-    
-    def median_blur_median_blur(self, size):
-        self.loading()
-        self.img = cv2.medianBlur(self.img, 5)
-        self.r = self.img[...,0]
-        self.g = self.img[...,1]
-        self.b = self.img[...,2]     
-        self.swap_img()
-
     def sharpen(self):
         self.loading()
         kernel = np.array([[0, -1, 0], [-1, 5, -1], [0, -1, 0]])

@@ -51,7 +51,6 @@ if __name__ == '__main__':
     filter_menu.add_cascade(label = "Blurs", menu = blur_menu)
     blur_menu.add_command(label = "Gaussian Blur", command = IE.gaussian_blur)
     blur_menu.add_command(label = "Box Blur", command = IE.box_blur)
-    blur_menu.add_command(label = "Median Blur", command = IE.median_blur)
     filter_menu.add_command(label = "Sharpening", command = IE.sharpen)
     filter_menu.add_command(label = "Reduce Noise", command = IE.reduce_noise)
 
