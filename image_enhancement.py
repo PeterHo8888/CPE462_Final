@@ -244,6 +244,7 @@ class ImageEnhancement:
 #        self.swap_img()
 
     def sharpen_kernel(self, kernel):
+        # not used
         ret = np.zeros((self.img.shape[0], self.img.shape[1]))
         cx = self.img.shape[1] // 2
         cy = self.img.shape[0] // 2
@@ -270,6 +271,7 @@ class ImageEnhancement:
         self.swap_img()
 
     def harris_detection(self):
+        '''https://docs.opencv.org/3.4/dc/d0d/tutorial_py_features_harris.html'''
         self.loading()
         gray = cv2.cvtColor(self.img, cv2.COLOR_BGR2GRAY)
         gray = np.float32(gray)
@@ -303,7 +305,7 @@ class ImageEnhancement:
 
     def kmeans_kmeans(self, K):
         self.loading()
-        Z = self.img.reshape((-1,3))
+        Z = self.img.reshape((-1, 3))
         Z = np.float32(Z)
 
         criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
@@ -320,6 +322,7 @@ class ImageEnhancement:
         self.swap_img()
 
     def segment_colorfulness(self, mask):
+        '''https://www.pyimagesearch.com/2017/06/26/labeling-superpixel-colorfulness-opencv-python/'''
         B, G, R = cv2.split(self.img.astype("float"))
         R = np.ma.masked_array(R, mask = mask)
         G = np.ma.masked_array(B, mask = mask)
@@ -333,6 +336,8 @@ class ImageEnhancement:
         return stdRoot + (0.3 * meanRoot)
 
     def slic(self):
+        '''https://www.pyimagesearch.com/2017/06/26/labeling-superpixel-colorfulness-opencv-python/'''
+
         self.loading()
 
         vis = np.zeros(self.img.shape[:2], dtype="float")
@@ -359,15 +364,16 @@ class ImageEnhancement:
 
     def GaussianFilter(self, sigma_x, sigma_y):
         self.loading()
-        nrows = self.img.shape[0]
-        ncols = self.img.shape[1]
-        cy, cx = nrows / 2, ncols / 2
-        x = np.linspace(0, ncols, ncols)
-        y = np.linspace(0, nrows, nrows)
-        X, Y = np.meshgrid(x, y)
-        gmask = np.exp(-(((X - cx) / sigma_x) ** 2 + ((Y - cy) / sigma_y) ** 2))
+        rows = self.img.shape[0]
+        cols = self.img.shape[1]
+        x = np.linspace(0, cols, cols)
+        y = np.linspace(0, rows, rows)
+        gx, gy = np.meshgrid(x, y)
+        cy = rows / 2
+        cx = cols / 2
+        kernel = np.exp(-(((gx - cx) / sigma_x) ** 2 + ((gy - cy) / sigma_y) ** 2))
 
-        return gmask
+        return kernel
 
     def fft_convolve2d(self, kernel_fn, *args):
         fft_img_r = np.fft.fft2(self.img[..., 0])
@@ -407,6 +413,8 @@ class ImageEnhancement:
         return (img - img.min()) / (np.ptp(img)) * max_ + min_
 
     def human_pose_estimation(self):
+        '''https://github.com/quanhua92/human-pose-estimation-opencv'''
+
         self.loading()
 
         BODY_PARTS = { "Nose": 0, "Neck": 1, "RShoulder": 2, "RElbow": 3, "RWrist": 4,
